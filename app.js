@@ -7,7 +7,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-var port = process.env.port || 3000;
+var port = process.env.PORT || 3000;
 const uri = 'mongodb://localhost:27017/salesManager';
 
 /**
