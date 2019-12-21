@@ -7,7 +7,6 @@ app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-var port = process.env.PORT || 3000;
 const uri = 'mongodb://localhost:27017/salesManager';
 
 /**
@@ -71,7 +70,8 @@ app.get('/pushlish-mqtt/:voice', async (req, res) => {
   
 })
 
-app.listen(port, `0.0.0.0`, function () {
+let PORT = process.env.PORT || 3000;
+app.listen(PORT, function () {
     client = mqtt.connect('https://m24.cloudmqtt.com', option);
     client.on('connect', async function () {
         let subcribe = await client.subscribe('public/esp/outputhuynhvinhrikin', function (err) {
@@ -80,5 +80,5 @@ app.listen(port, `0.0.0.0`, function () {
         });
         console.log({ subcribe })
     })
-    console.log('working in ' + port);
+    console.log('working in ' + PORT);
 });
