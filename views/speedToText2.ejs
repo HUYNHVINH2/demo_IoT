@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+
+<div id="content"  style="margin-left: 670px;">
+(nội dung )
+</div>
+<br>
+<div>
+<button id="btnCheck" type="button" style="margin-left: 650px;" class="btn btn-success">Điều Khiển</button>
+
+</div>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+
+    function callServicePredict(keyRecognition){
+        return $.ajax({
+          type: 'GET',
+          url: `/pushlish-mqtt/${keyRecognition}`,
+          success: resp => console.log({ resp }), 
+          error: err => console.log({ err })
+      })
+    }
+
+    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    window.SpeechGrammarList = window.webkitSpeechGrammarList || window.SpeechGrammarList;
+
+      var grammar = '#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;'
+      var recognition = new window.SpeechRecognition();
+      recognition.lang = 'vi-VN';
+      var speechRecognitionList = new window.SpeechGrammarList();
+      speechRecognitionList.addFromString(grammar, 1);
+      recognition.grammars = speechRecognitionList;
+        
+    var counter = 0;
+    var interval = setInterval(function(){
+        counter++;
+    }, 1000)
+
+
+    recognition.onend = function() {
+        if(counter <= 2 * 60)
+            recognition.start();
+        else
+            clearInterval(interval)
+    }
+
+      recognition.onresult = event => {
+        let keyRecognition = event.results[0][0].transcript;
+        console.log({ keyRecognition })
+        $('#content').empty();
+        $('#content').append(keyRecognition);
+        return callServicePredict(keyRecognition)
+      }
+
+      var diagnostic = document.querySelector('.output');
+      var bg = document.querySelector('html');
+
+      $('#btnCheck').on('click', function() {
+        recognition.start();
+        console.log('Ready to receive a color command.');
+      })
+
+      // abortBtn.onclick = function() {
+      //   recognition.abort();
+      //   console.log('Speech recognition aborted.');
+      // }
+
+      // recognition.onspeechend = function() {
+      //   recognition.stop();
+      //   console.log('Speech recognition has stopped.');
+      // }
+  </script>
+
+  
+</body>
+</html>

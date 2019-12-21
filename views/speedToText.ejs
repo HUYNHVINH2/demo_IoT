@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Speech Recording</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<style>
+  .boxInfor{
+    margin-left: 615px;
+    margin-top: 70px;
+  }
+  #control-button{
+    background-color: chartreuse;
+    border: chartreuse;
+    width: 100px;
+    height: 50px;
+    
+  }
+</style>
+<body>
+  <div class="boxInfor">
+      <button id='control-button'>điều khiển</button>
+      <div id='click' class= "buttonOn">On</div>
+  </div>
+</body>
+<script>
+    // $('#control-button').click(function () {
+    let keyRecognition;
+
+    window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    let finalTranscript = '';
+    let recognition = new window.SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 10;
+    recognition.lang = 'en';
+    recognition.continuous = true;
+    
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      console.log(`------------>>>>`)
+        keyRecognition = event.results[0][0].transcript;
+        console.log(keyRecognition)  
+    }
+
+    // if (keyRecognition)
+    //   callServicePredict(keyRecognition);
+    // // })
+
+    // function callServicePredict(keyRecognition){
+    //     $.ajax({
+    //       type: 'post',
+    //       url: `/pushlish-mqtt`,
+    //       data: { voice: keyRecognition }, 
+    //       dataType: "json",
+    //       success: function (data) {
+    //         console.log(data);
+    //         // recognition.stop();
+    //       }, error: function (err) {
+    //         console.log(err)
+    //       }
+    //     })
+    //   }
+    
+  </script>
+</html>
